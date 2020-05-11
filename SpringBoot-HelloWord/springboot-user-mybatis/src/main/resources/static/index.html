@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户管理系统</title>
+<script type="text/javascript" src="./ui/jquery-3.0.0.min.js"></script>
+</head>
+
+<style type="text/css">
+table.tftable {
+	font-size: 12px;
+	color: #333333;
+	width: 50%;
+	border-width: 1px;
+	border-color: #729ea5;
+	border-collapse: collapse;
+}
+
+table.tftable th {
+	font-size: 12px;
+	background-color: #acc8cc;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #729ea5;
+	text-align: left;
+}
+
+table.tftable tr {
+	background-color: #d4e3e5;
+}
+
+table.tftable td {
+	font-size: 12px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #729ea5;
+}
+</style>
+
+<script type="text/javascript">
+console.log("请求准备发送");
+$.ajax({
+	　　type: "post",　　　　　　　　　　 
+	　　url: "user/findAllUsser",　　　　　　　　　　　 
+	　　contentType: "application/json",
+	　　dataType: "json",
+	　　success: function (data)
+
+	　　{
+	　　　　//成功获取一般处理程序响应后执行的代码
+		 $(data).each(function (index, obj) {
+			$("#tfhover").append('<tr id="tr2">' +
+			'<td>' + obj.id + '</td>' +
+			'<td>' + obj.user_name + '</td>' +
+			'<td>' + obj.password + '</td>' +
+			'<td>' + obj.name + '</td>' +
+			'<td>' + "" + '</td>' +
+			+'</tr>');	
+	　　     })
+	　　},
+	　　error: function (err)
+
+	　　{
+	　　　　//收到一般处理程序响应失败后执行的代码
+	　　}
+	});
+</script>
+<body>
+
+	<table id="tfhover" class="tftable" border="1">
+		<tr id="">
+			<th>编号</th>
+			<th>用户</th>
+			<th>密码</th>
+			<th>姓名</th>
+			<th>操作</th>
+		</tr>
+	</table>
+
+
+</body>
+</html>
