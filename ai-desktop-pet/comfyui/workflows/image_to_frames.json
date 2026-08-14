@@ -1,0 +1,22 @@
+{
+  "loader": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "reference.png"
+    }
+  },
+  "upscale": {
+    "class_type": "ImageUpscaleWithModel",
+    "inputs": {
+      "upscale_model": "model:RealESRGAN_x4plus_anime_6B.pth",
+      "image": ["loader", 0]
+    }
+  },
+  "save": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "desktop_pet",
+      "images": ["upscale", 0]
+    }
+  }
+}

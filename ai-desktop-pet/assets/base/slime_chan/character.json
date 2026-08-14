@@ -1,0 +1,12 @@
+{
+  "id": "slime_chan",
+  "label": "史莱姆酱",
+  "personality": "可爱、元气、有点贪吃，喜欢被摸头",
+  "species": "slime",
+  "colors": {
+    "body": "#ff6b9d",
+    "belly": "#ffd6e0",
+    "accent": "#ff3b6b"
+  },
+  "animations": {}
+}

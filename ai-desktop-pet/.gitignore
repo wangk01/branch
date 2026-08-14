@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+data/settings.json
+data/state.json
+data/chat_history.json
+data/*.bak
+data/characters/
+build/build/
+dist/
+*.spec.bak
+.pytest_cache/
+.venv/

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Desktop Pet - 效果预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: linear-gradient(135deg, #fdf2f6 0%, #e8f0ff 100%);
+    min-height: 100vh;
+    color: #333;
+  }
+  header {
+    text-align: center;
+    padding: 40px 20px 10px;
+  }
+  header h1 { font-size: 28px; color: #e0567a; }
+  header p { margin-top: 8px; color: #777; font-size: 14px; }
+  .stage {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 30px;
+    background: rgba(255,255,255,0.75);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(224,86,122,0.15);
+  }
+  .pet-show {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-end;
+    min-height: 260px;
+    flex-wrap: wrap;
+  }
+  .pet-card { text-align: center; }
+  .pet-card .pet { position: relative; width: 180px; height: 180px; }
+  .pet-card .name { margin-top: 12px; font-weight: 600; }
+  .pet-card .state { margin-top: 4px; font-size: 13px; color: #999; }
+  .controls {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed #e0c9d2;
+  }
+  .controls button {
+    padding: 10px 18px;
+    margin: 4px;
+    border: none;
+    border-radius: 999px;
+    background: #ff6b9d;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .controls button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(255,107,157,.4); }
+  .controls button.active { background: #5b6cff; }
+  .tag {
+    display: inline-block; background: #fff0f4; color: #e0567a;
+    padding: 4px 12px; border-radius: 999px; font-size: 12px; margin: 4px;
+  }
+  footer { text-align: center; padding: 30px; color: #aaa; font-size: 12px; }
+  .feature-grid {
+    max-width: 900px; margin: 20px auto; display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; padding: 0 20px;
+  }
+  .feature {
+    background: #fff; border-radius: 14px; padding: 18px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.05); text-align: center;
+  }
+  .feature .emoji { font-size: 30px; }
+  .feature h3 { font-size: 15px; margin: 8px 0 4px; }
+  .feature p { font-size: 12px; color: #888; line-height: 1.6; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes wobble { 0%,100% { transform: scaleX(1) scaleY(1); } 50% { transform: scaleX(1.05) scaleY(0.95); } }
+  @keyframes walk { 0%,100% { transform: translateX(-20px); } 50% { transform: translateX(20px); } }
+  @keyframes zz { 0% { opacity: 0; transform: translateY(10px); } 50% { opacity: 1; } 100% { opacity: 0; transform: translateY(-14px); } }
+  .slime { animation: wobble 1.6s ease-in-out infinite; }
+  .dog { animation: bob 1.4s ease-in-out infinite; }
+  .walking .slime, .walking .dog { animation: walk 1.8s ease-in-out infinite; }
+  .bubble {
+    position: absolute; top: 8px; right: -20px;
+    background: #fff; border: 2px solid #ffb3c6; border-radius: 14px;
+    padding: 8px 12px; font-size: 13px; white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,.1); opacity: 0; transition: opacity .4s;
+  }
+  .bubble.show { opacity: 1; }
+  .zzz { position: absolute; font-size: 20px; animation: zz 1.5s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<header>
+  <h1>AI Desktop Pet 效果预览</h1>
+  <p>Windows 桌面宠物 · 自主行为 · AI 对话 · 侧边栏吸附 · 角色定制</p>
+  <div style="margin-top:10px">
+    <span class="tag">散步</span><span class="tag">打瞌睡</span><span class="tag">玩耍</span><span class="tag">讨食</span><span class="tag">抚摸</span><span class="tag">AI 对话</span>
+  </div>
+</header>
+
+<div class="stage">
+  <div class="pet-show" id="petShow">
+    <div class="pet-card">
+      <div class="pet">
+        <svg class="slime" viewBox="0 0 160 160" width="160" height="160">
+          <ellipse cx="80" cy="100" rx="42" ry="40" fill="#ff6b9d"/>
+          <ellipse cx="80" cy="118" rx="24" ry="20" fill="#ffd6e0"/>
+          <circle cx="66" cy="88" r="4" fill="#222"/>
+          <circle cx="94" cy="88" r="4" fill="#222"/>
+          <path id="smile" d="M70 104 Q80 114 90 104" stroke="#222" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="52" cy="98" r="3" fill="#ff3b6b"/>
+          <circle cx="108" cy="98" r="3" fill="#ff3b6b"/>
+        </svg>
+        <div class="bubble" id="bubble1"></div>
+      </div>
+      <div class="name">史莱姆酱</div>
+      <div class="state" id="state1">待机中</div>
+    </div>
+    <div class="pet-card">
+      <div class="pet">
+        <svg class="dog" viewBox="0 0 160 160" width="160" height="160">
+          <ellipse cx="80" cy="98" rx="38" ry="34" fill="#c8a24b"/>
+          <ellipse cx="80" cy="96" rx="26" ry="23" fill="#f0e0b0"/>
+          <ellipse cx="46" cy="78" rx="10" ry="18" fill="#8a6a2f"/>
+          <ellipse cx="114" cy="78" rx="10" ry="18" fill="#8a6a2f"/>
+          <circle cx="68" cy="90" r="4" fill="#222"/>
+          <circle cx="92" cy="90" r="4" fill="#222"/>
+          <path d="M72 102 Q80 108 88 102" stroke="#222" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path id="dogtail" d="M118 88 Q130 80 124 66" stroke="#c8a24b" stroke-width="7" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="bubble" id="bubble2"></div>
+      </div>
+      <div class="name">小汪</div>
+      <div class="state" id="state2">待机中</div>
+    </div>
+  </div>
+
+  <div class="controls" id="controls">
+    <button data-behavior="idle">待机</button>
+    <button data-behavior="walk">散步</button>
+    <button data-behavior="sleep">打瞌睡</button>
+    <button data-behavior="play">玩耍</button>
+    <button data-behavior="hungry">讨食</button>
+    <button data-behavior="chat">聊天</button>
+  </div>
+</div>
+
+<div class="feature-grid">
+  <div class="feature"><div class="emoji">🖥️</div><h3>透明置顶窗口</h3><p>无边框透明背景，常驻桌面不干扰其他应用，可随意拖拽</p></div>
+  <div class="feature"><div class="emoji">📌</div><h3>侧边栏吸附</h3><p>拖到屏幕边缘自动吸附，紧凑展示，不占桌面空间</p></div>
+  <div class="feature"><div class="emoji">✨</div><h3>自主行为</h3><p>无人操作时自主散步、打瞌睡、玩耍，行为由属性状态驱动</p></div>
+  <div class="feature"><div class="emoji">💬</div><h3>AI 对话</h3><p>接入 OpenAI 兼容大模型，宠物结合心情与属性智能回复</p></div>
+  <div class="feature"><div class="emoji">🎨</div><h3>角色定制</h3><p>内置多角色，支持导入素材或 ComfyUI 生成自定义宠物</p></div>
+  <div class="feature"><div class="emoji">📦</div><h3>exe 打包</h3><p>PyInstaller + NSIS 打包为安装程序，一键安装到 Windows</p></div>
+</div>
+
+<footer>AI Desktop Pet · 本项目为效果预览页，实际为 Windows 桌面程序</footer>
+
+<script>
+const bubbleTexts = {
+  idle: ["嗯？怎么啦~", "我在等你呢 (´･ω･`)"],
+  walk: ["出去散散步~", "世界那么大，想去看看"],
+  sleep: ["Zzz... 好困...", "让我睡一会嘛~"],
+  play: ["嘿嘿，来玩呀！", "好开心！(≧▽≦)"],
+  hungry: ["肚子好饿呀...", "想吃饭饭~"],
+  chat: ["今天也要开心哦！", "主人最好啦~"],
+};
+const stateText = { idle: "待机中", walk: "散步中", sleep: "打瞌睡", play: "玩耍中", hungry: "讨食中", chat: "聊天中" };
+
+const slime = document.querySelector('.slime');
+const dog = document.querySelector('.dog');
+const show = document.getElementById('petShow');
+let activeBtn = null;
+
+function setBehavior(name) {
+  show.classList.remove('walking');
+  if (name === 'walk') show.classList.add('walking');
+
+  const zz = document.querySelectorAll('.zzz');
+  zz.forEach(z => z.remove());
+  if (name === 'sleep') {
+    ['Z', 'z', 'z'].forEach((ch, i) => {
+      const el = document.createElement('span');
+      el.className = 'zzz';
+      el.style.top = (20 + i * 8) + 'px';
+      el.style.left = (130 + i * 14) + 'px';
+      el.textContent = ch;
+      el.style.animationDelay = (i * 0.3) + 's';
+      slime.closest('.pet').appendChild(el);
+    });
+  }
+
+  document.getElementById('state1').textContent = stateText[name];
+  document.getElementById('state2').textContent = stateText[name];
+
+  const bubbles = [document.getElementById('bubble1'), document.getElementById('bubble2')];
+  bubbles.forEach((b, i) => {
+    const pool = bubbleTexts[name];
+    b.textContent = pool[Math.floor(Math.random() * pool.length)];
+    b.classList.add('show');
+    setTimeout(() => b.classList.remove('show'), 2200);
+  });
+
+  document.querySelectorAll('#controls button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.behavior === name);
+  });
+  activeBtn = name;
+}
+
+document.getElementById('controls').addEventListener('click', e => {
+  if (e.target.tagName === 'BUTTON') setBehavior(e.target.dataset.behavior);
+});
+
+setBehavior('idle');
+setInterval(() => {
+  const states = ['idle', 'idle', 'walk', 'idle', 'play', 'idle', 'sleep'];
+  setBehavior(states[Math.floor(Math.random() * states.length)]);
+}, 6000);
+</script>
+</body>
+</html>

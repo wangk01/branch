@@ -1,0 +1,12 @@
+{
+  "id": "dog",
+  "label": "小汪",
+  "personality": "忠诚、活泼，喜欢叼球玩",
+  "species": "dog",
+  "colors": {
+    "body": "#c8a24b",
+    "belly": "#f0e0b0",
+    "accent": "#8a6a2f"
+  },
+  "animations": {}
+}
